@@ -28,4 +28,27 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
+# Problem 2
+
+### load, clean and tidy the data
+```{r}
+accel_data <- read_csv(
+              "./data/accel_data.csv") %>% 
+              janitor::clean_names() %>% 
+              pivot_longer(
+                starts_with("activity"),
+                names_to = "minute",
+                names_prefix = "activity_",
+                values_to = "activity_count") %>% 
+              mutate(
+                minute = as.integer(minute),
+                weekend = case_when(
+                  day %in% c("Saturday", "Sunday")                                   ~ 1,
+                  day %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday") ~ 0))
+                 
+                
+                
+              
+```
+
 
