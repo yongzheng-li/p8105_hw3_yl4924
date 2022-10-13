@@ -42,13 +42,12 @@ accel_data <- read_csv(
                 values_to = "activity_count") %>% 
               mutate(
                 minute = as.integer(minute),
-                weekend = case_when(
-                  day %in% c("Saturday", "Sunday")                                   ~ 1,
-                  day %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday") ~ 0))
-                 
-                
-                
-              
+                day_of_week = case_when(
+                  day %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday") ~ 1,
+                  day %in% c("Saturday", "Sunday")                                   ~ 2),
+                day_of_week = recode_factor(day_of_week, `1` = "weekday", `2` = "weekend"),
+                day = factor(day, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday","Saturday", "Sunday")))
 ```
 
-
+what variables exist, how many observations
+The accel_data contain `r nrow` number of observations of a 63 year old male with bmi 25 in 35 days. The dataset contain `r ncol` variables. The variables include week, day, minute, activity_count, and day_of_week. Among these variables, activity_count is the most important variable. The mean activity_count of the male in 35 days is `r mean(accel_data$activity_count)` per minutes.
