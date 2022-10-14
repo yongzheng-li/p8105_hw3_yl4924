@@ -49,18 +49,31 @@ accel_data <- read_csv(
                 day = factor(day, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday","Saturday", "Sunday")))
 ```
 
-what variables exist, how many observations
 The accel_data contain `r nrow(accel_data)` number of observations of a 63 year old male with bmi 25 in 35 days. The dataset contain `r ncol(accel_data)` variables. The variables include week, day_id, day, minute, activity_count, and day_of_week. Among these variables, activity_count is the most important variable. The mean activity_count of the male in 35 days is `r mean(accel_data$activity_count)` per minutes.
 
 ### Part 2: total activity over the day
 ```{r}
 accel_data %>% 
   group_by(week, day) %>% 
-  summarize(day_total_activity = sum(activity_count)) %>% 
+  summarize(total_day_count = sum(activity_count)) %>% 
   pivot_wider(
     names_from = "day",
-    values_from = "day_total_activity") %>% 
+    values_from = "total_day_count") %>% 
   knitr::kable(digits = 1)
 
 ```
 
+From the output table, there is a increasing trend of activity count on weekdays in week 1, week 2, and week 5. Week 4 has a decreasing trend of activity count on weekdays. It is worth to note that On Saturday in week 4 and 5, the total activity count is 1440 that means there is only 1 activity count per minute in these two days. The value is probably a missing value and we should give more attention to these values.
+
+### Part 3: 
+```{r}
+accel_data %>% 
+ggplot(aes(x = minute, y = activity_count, color = day)) +
+  geom_line(alpha = 0.7) +
+  labs(
+    title = "24-hour activity time courses for each day",
+    x = "Minute",
+    y = "Activity Count"
+  )
+```
+From the plot, minutes from 0 to 250 has relative low activity count(below 1250 counts). The activity count increased from 250 mins to 1125 mins(around 1875 counts except Sunday). The activity count increased to the highest from 1125 mins to 1300 mins(above 3000 counts). The activity count decreased below 1250 counts after 1300 mins(around 1250 counts).
