@@ -65,7 +65,7 @@ accel_data %>%
 
 From the output table, there is a increasing trend of activity count on weekdays in week 1, week 2, and week 5. Week 4 has a decreasing trend of activity count on weekdays. It is worth to note that On Saturday in week 4 and 5, the total activity count is 1440 that means there is only 1 activity count per minute in these two days. The value is probably a missing value and we should give more attention to these values.
 
-### Part 3: 
+### Part 3: single-panel plot that show 24 hour activity time courses 
 ```{r}
 accel_data %>% 
 ggplot(aes(x = minute, y = activity_count, color = day)) +
@@ -77,3 +77,13 @@ ggplot(aes(x = minute, y = activity_count, color = day)) +
   )
 ```
 From the plot, minutes from 0 to 250 has relative low activity count(below 1250 counts). The activity count increased from 250 mins to 1125 mins(around 1875 counts except Sunday). The activity count increased to the highest from 1125 mins to 1300 mins(above 3000 counts). The activity count decreased below 1250 counts after 1300 mins(around 1250 counts).
+
+# Problem 3
+
+### Part 1: 
+```{r}
+library(p8105.datasets)
+data("ny_noaa")
+skimr::skim(ny_noaa)
+```
+
