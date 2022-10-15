@@ -90,7 +90,7 @@ head(ny_noaa)
 skimr::skim(ny_noaa)
 ```
 
-from the the summary result, the data contain 2595176 observations and 9 variables. The key variables are prcp, snow, snwd, tmax, and tmin. There are 145838, 381221, and 591786 missing values in variable prcp, snow and snwd that account 5.6%, 14.7%, 22.8% percent of values in each variable, respectively. 
+from the the summary result, the data contain 2595176 observations and 9 variables. The key variables are prcp, snow, snwd, tmax, and tmin. There are 145838, 381221, and 591786 missing values in variable prcp, snow and snwd that account 5.6%, 14.7%, 22.8% percent of values in each variable, respectively. There are also missing values in variables tmax and tmin 
 
 ### bullet point 1: data cleaning
 Clean date by seperating date into year, month, day, change prcp unit to mm, convert tmax, tmin into numerical variable and change unit to degrees C.
@@ -100,7 +100,9 @@ ny_noaa <- ny_noaa %>%
   mutate(
     tmax = as.numeric(tmax)*0.1,
     tmin = as.numeric(tmin)*0.1,
-    prcp = prcp*0.1
+    prcp = prcp*0.1,
+    year = as.integer(year),
+    month = month.name[as.integer(month)]
   )
 
 find_mode <- function(x) {
@@ -113,5 +115,17 @@ find_mode <- function(x) {
 The most commonly observed values for snowfall(variable snow) is `r find_mode(ny_noaa$snow)` mm. The reason that 0 mm snowfall is the most observed value is because snow only falls when temperate is very low(around 0 degree c). In every year, only some of the countries can have snowfalls during the winter. Therefore, it is usual to see the most observed value of snowfall = 0. 
 
 ### bullet point 2: 
+```{r}
+ny_noaa %>% 
+  filter(month %in% c("January", "July")) %>% 
+  group_by(id, month, year) %>% 
+  summarize(average_max_temp = mean(tmax, na.rm = TRUE)) %>% 
+  ggplot(aes(x = year, y = average_max_temp, group = id)) +
+  geom_line(alpha = 0.7) +
+  facet_grid(. ~ month)
+  
+```
 
+From the plot, it is clear to see that average maximum temperature in July is greater than January. The average maximum temperate fluctuate across years. The plot shows the pattern that the average maximum temperate increase for 2-3 years follow by a decrease for 2-3 years. There are some outliers for both month. One of the outliers has an average maximum temperate of -13 degrees of C in January in 1982.
 
+### bullet point 3:
