@@ -101,7 +101,6 @@ ny_noaa <- ny_noaa %>%
     tmax = as.numeric(tmax)*0.1,
     tmin = as.numeric(tmin)*0.1,
     prcp = prcp*0.1,
-    year = as.integer(year),
     month = month.name[as.integer(month)]
   )
 
@@ -129,3 +128,23 @@ ny_noaa %>%
 From the plot, it is clear to see that average maximum temperature in July is greater than January. The average maximum temperate fluctuate across years. The plot shows the pattern that the average maximum temperate increase for 2-3 years follow by a decrease for 2-3 years. There are some outliers for both month. One of the outliers has an average maximum temperate of -13 degrees of C in January in 1982.
 
 ### bullet point 3:
+
+since the plot of tmax vs tmin for the full dataset has large number of data, I choose to use hex plot to plot tmax vs tmin. for plot 2, boxplot is helpful to show the distribution for different variables. 
+```{r}
+tmax_tmin_plot <- 
+  ny_noaa %>% 
+  ggplot(aes(x = tmax, y = tmin)) + 
+  geom_hex(alpha = 0.7)
+
+dist_snow_plot <-
+  ny_noaa %>% 
+  filter(0 < snow & snow < 100) %>% 
+  ggplot(aes(x = snow, y = year)) +
+  geom_boxplot()
+
+tmax_tmin_plot + dist_snow_plot
+
+```
+
+
+
