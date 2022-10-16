@@ -41,6 +41,7 @@ instacart <-
   as_tibble(instacart)
 
 ```
+
 The dataset contain `r nrow(instacart)` of rows and `r ncol(instacart)` variables. The variables include identification variable order_id, product_id, user_id. There are several item specific variable, describing product name(e.g. yogurt), department(dairy), and aisle(e.g. fresh vegetables) and wheather their order has been ordered in the past.
 
 ### Part 1
@@ -135,6 +136,7 @@ ggplot(aes(x = minute, y = activity_count, color = day)) +
     y = "Activity Count"
   )
 ```
+
 From the plot, minutes from 0 to 250 has relative low activity count(below 1250 counts). The activity count increased from 250 mins to 1125 mins(around 1875 counts except Sunday). The activity count increased to the highest from 1125 mins to 1300 mins(above 3000 counts). The activity count decreased below 1250 counts after 1300 mins(around 1250 counts).
 
 # Problem 3
@@ -162,10 +164,13 @@ ny_noaa <- ny_noaa %>%
     prcp = prcp*0.1,
     month = month.name[as.integer(month)]
   )
-}
+
+ny_noaa %>% 
+  count(snow) %>% 
+  arrange(desc(n))
 ```
 
-The most commonly observed values for snowfall(variable snow) is `r ny_noaa %>% count(snow) %>% arrange(desc(n))` mm. The reason that 0 mm snowfall is the most observed value is because snow only falls when temperate is very low(around 0 degree c). In every year, only some of the countries can have snowfalls during the winter. Therefore, it is usual to see the most observed value of snowfall = 0. 
+The most commonly observed values for snowfall(variable snow) is 0 mm. The reason that 0 mm snowfall is the most observed value is because snow only falls when temperate is very low(around 0 degree c). In every year, only some of the countries can have snowfalls during the winter. Therefore, it is usual to see the most observed value of snowfall = 0. 
 
 ### bullet point 2: 
 ```{r}
@@ -175,7 +180,8 @@ ny_noaa %>%
   summarize(average_max_temp = mean(tmax, na.rm = TRUE)) %>% 
   ggplot(aes(x = year, y = average_max_temp, group = id)) +
   geom_line(alpha = 0.7) +
-  facet_grid(. ~ month)
+  facet_grid(. ~ month) + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
   
 ```
 
@@ -188,7 +194,8 @@ since the plot of tmax vs tmin for the full dataset has large number of data, I 
 tmax_tmin_plot <- 
   ny_noaa %>% 
   ggplot(aes(x = tmax, y = tmin)) + 
-  geom_hex(alpha = 0.7)
+  geom_hex(alpha = 0.7) +
+  theme(legend.text = element_text(angle = 60, hjust = 1))
 
 dist_snow_plot <-
   ny_noaa %>% 
@@ -199,5 +206,6 @@ dist_snow_plot <-
 tmax_tmin_plot + dist_snow_plot
 
 ```
+
 tmax and tmin shows a positive correlation for the full dataset. the highest count is around tmin = 0 degree C with tmax = 10 degree C and tmin = 15 degree C with tmax = 25 degree C. From the dist_snow_plot, each year has similar distribution except years in 2010, 2009, 2006, 2004, and 1998. The box plot shows outliers of snowfall in year 2010, 2006, 1998. 
 
